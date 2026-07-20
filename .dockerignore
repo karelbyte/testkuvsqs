@@ -1,0 +1,24 @@
+# Dependencias locales (Docker las instalará desde cero adentro)
+node_modules/
+npm-debug.log
+
+# Archivos de variables de entorno y credenciales (¡NUNCA subirlos!)
+.env
+.env.*
+*.pem
+
+# Archivos de Git
+.git/
+.gitignore
+.github/
+
+# Archivos de configuración de Kubernetes/Terraform locales
+*.yaml
+*.tf
+*.tfstate*
+
+# Archivos del sistema y de editores de código
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
