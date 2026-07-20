@@ -8,7 +8,7 @@ app.use(express.json());
 // Configuración del cliente SQS
 // En AWS EKS, las credenciales se manejan mediante IAM Roles for Service Accounts (IRSA),
 // por lo que no necesitarás quemar llaves de acceso aquí.
-const sqsClient = new SQSClient({ region: process.env.AWS_REGION || 'us-east-1' });
+const sqsClient = new SQSClient({ region: process.env.AWS_REGION || 'us-east-2' });
 const QUEUE_URL = process.env.SQS_QUEUE_URL;
 
 app.post('/api/evento', async (req, res) => {

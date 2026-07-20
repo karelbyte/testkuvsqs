@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+  labels:
+    app: api-sqs
+spec:
+  replicas: 2 # Empezaremos con 2 instancias/pods de tu API
+  selector:
+    matchLabels:
+      app: api-sqs
+  template:
+    metadata:
+      labels:
+        app: api-sqs
+    spec:
+      containers:
+      - name: api-container
+        # AQUÍ LE DECIMOS A KUBERNETES QUÉ IMAGEN USAR DE TU ECR
+        image: 631860341993.dkr.ecr.us-east-2.amazonaws.com/apiimg:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000 # Cambia 3000 por el puerto interno que use tu API (ej. 80, 8080)
+        env:
+        # Aquí puedes pasar las variables de entorno que necesite tu API
+        - name: AWS_REGION
+          value: "us-east-2"
+        - name: SQS_QUEUE_URL
+          value: "https://sqs.us-east-2.amazonaws.com/631860341993/sqst01" # Reemplaza por la URL de tu SQS

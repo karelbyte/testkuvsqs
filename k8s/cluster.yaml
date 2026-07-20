@@ -1,0 +1,15 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: test-sqs-ec2
+  region: us-east-2
+  version: "1.30"
+
+managedNodeGroups:
+  - name: ng-ec2-nodes
+    instanceType: t3.medium
+    desiredCapacity: 2
+    minSize: 1
+    maxSize: 3
+    privateNetworking: false
