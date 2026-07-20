@@ -12,26 +12,24 @@ const sqsClient = new SQSClient({ region: process.env.AWS_REGION || 'us-east-2' 
 const QUEUE_URL = process.env.SQS_QUEUE_URL;
 
 app.post('/api/evento', async (req, res) => {
+    console.log('>>> Petición recibida en /api/evento:', req.body);
+    
     try {
-        const payload = req.body;
-
-        // Preparamos el comando para enviar a la fila de SQS
-        const command = new SendMessageCommand({
-            QueueUrl: QUEUE_URL,
-            MessageBody: JSON.stringify(payload),
-        });
-
-        // Enviamos a SQS de forma asíncrona
-        await sqsClient.send(command);
-
-        // Respondemos de inmediato al cliente con un 202 (Aceptado)
-        // No esperamos a que se guarde en la Base de Datos
-        return res.status(202).json({ status: 'queued' });
+      const command = new SendMessageCommand({
+        QueueUrl: process.env.SQS_QUEUE_URL,
+        MessageBody: JSON.stringify(req.body)
+      });
+  
+      console.log('>>> Enviando a SQS URL:', process.env.SQS_QUEUE_URL);
+      const response = await sqsClient.send(command);
+      console.log('>>> ÉXITO SQS MessageId:', response.MessageId);
+  
+      return res.json({ status: 'queued', messageId: response.MessageId });
     } catch (error) {
-        console.error('Error enviando a SQS:', error);
-        return res.status(500).json({ error: 'Internal Server Error' });
+      console.error('>>> ERROR AL ENVIAR A SQS:', error);
+      return res.status(500).json({ status: 'error', error: error.message });
     }
-});
+  });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
